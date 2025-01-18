@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "176049715934",
+    "project_id": "attendify-e0935",
+    "storage_bucket": "attendify-e0935.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:176049715934:android:7e2a455331cde387da204f",
+        "android_client_info": {
+          "package_name": "com.example.flutter_taptime"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQrRVlBxXbQfI-icwFbjxlGYfUoczP5Yw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
