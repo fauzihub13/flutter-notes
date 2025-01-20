@@ -25,7 +25,9 @@ class _HandlerState extends State<Handler> {
         toggleView: toggleView,
       );
     } else {
-      return const RegisterPage();
+      return RegisterPage(
+        toggleView: toggleView,
+      );
     }
   }
 }

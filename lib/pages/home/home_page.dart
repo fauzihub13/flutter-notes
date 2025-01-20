@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_taptime/services/auth_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -9,6 +10,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final AuthService authService = AuthService();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _statusController = TextEditingController();
   final CollectionReference _studentAttendance =
@@ -89,7 +91,18 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home Page"),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text('Home Page'),
+            GestureDetector(
+              onTap: () async {
+                await authService.signOut();
+              },
+              child: const Icon(Icons.logout),
+            )
+          ],
+        ),
         backgroundColor: Colors.lightBlue,
         automaticallyImplyLeading: false,
       ),

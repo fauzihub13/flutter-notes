@@ -11,7 +11,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool _showHide = false;
+  bool _showHide = true;
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -38,18 +38,18 @@ class _LoginPageState extends State<LoginPage> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('Email'),
-                    ),
+                    // const Align(
+                    //   alignment: Alignment.centerLeft,
+                    //   child: Text('Email'),
+                    // ),
                     _emailField(),
                     const SizedBox(
                       height: 20,
                     ),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('Password'),
-                    ),
+                    // const Align(
+                    //   alignment: Alignment.centerLeft,
+                    //   child: Text('Password'),
+                    // ),
                     _passwordField(),
                     const SizedBox(
                       height: 20,
@@ -78,6 +78,8 @@ class _LoginPageState extends State<LoginPage> {
     return TextFormField(
       controller: emailController,
       autofocus: false,
+      decoration: const InputDecoration(
+          hintText: 'Masukkan email', label: Text('Email')),
       validator: (value) {
         if (value!.isEmpty) {
           return "Email tidak boleh kosong";
@@ -95,6 +97,17 @@ class _LoginPageState extends State<LoginPage> {
       obscureText: _showHide,
       controller: passwordController,
       autofocus: false,
+      decoration: InputDecoration(
+          hintText: 'Masukkan password',
+          label: const Text('Password'),
+          suffixIcon: GestureDetector(
+            child: const Icon(Icons.visibility),
+            onTap: () {
+              setState(() {
+                _showHide = !_showHide;
+              });
+            },
+          )),
       validator: (value) {
         if (value!.isEmpty) {
           return "Password tidak boleh kosong";
