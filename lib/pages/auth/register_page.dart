@@ -131,6 +131,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     email: emailController.text,
                     password: passwordController.text));
             if (result.uid == null) {
+              if (!mounted) return;
+
               showDialog(
                   context: context,
                   builder: (context) {

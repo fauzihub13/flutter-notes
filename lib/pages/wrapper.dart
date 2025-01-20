@@ -12,9 +12,9 @@ class Wrapper extends StatelessWidget{
     final user = Provider.of<UserModel?>(context);
 
     if(user == null){
-      return Handler();
+      return const Handler();
     } else{
-      return HomePage();
+      return const HomePage();
     }
   }
 

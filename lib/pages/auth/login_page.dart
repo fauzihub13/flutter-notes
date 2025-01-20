@@ -132,6 +132,7 @@ class _LoginPageState extends State<LoginPage> {
           if (_formKey.currentState!.validate()) {
             dynamic result = await _authService.signInAnonymous();
             if (result.uid == null) {
+              if (!mounted) return;
               showDialog(
                   context: context,
                   builder: (context) {
@@ -154,6 +155,7 @@ class _LoginPageState extends State<LoginPage> {
                     email: emailController.text,
                     password: passwordController.text));
             if (result.uid == null) {
+              if (!mounted) return;
               showDialog(
                   context: context,
                   builder: (context) {
