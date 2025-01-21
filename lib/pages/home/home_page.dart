@@ -151,6 +151,8 @@ class _HomePageState extends State<HomePage> {
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          _nameController.clear();
+          _statusController.clear();
           _createOrUpdate();
         },
         child: const Icon(Icons.add),
