@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_taptime/models/user_model.dart';
 import 'package:flutter_taptime/pages/wrapper.dart';
 import 'package:flutter_taptime/services/auth_service.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -21,13 +22,15 @@ class MyApp extends StatelessWidget {
     return StreamProvider<UserModel?>.value(
       value: AuthService().user,
       initialData: null,
-      child: MaterialApp(
-        title: 'Flutter TapTime',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
+      child: OverlaySupport.global(
+        child: MaterialApp(
+          title: 'Flutter TapTime',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+          home: const Wrapper(),
         ),
-        home: const Wrapper(),
       ),
     );
   }
