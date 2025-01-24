@@ -19,9 +19,9 @@ class _TodoListPageState extends State<TodoListPage> {
   void regisNotification() async {
     _firebaseMessaging = FirebaseMessaging.instance;
 
-    Future<void> _firebaseMessageHandler(RemoteMessage remoteMessage) async {
-      print('Handling message: ${remoteMessage.messageId}');
-    }
+    // Future<void> _firebaseMessageHandler(RemoteMessage remoteMessage) async {
+    //   print('Handling message: ${remoteMessage.messageId}');
+    // }
 
     // FirebaseMessaging.onBackgroundMessage(_firebaseMessageHandler);
 
@@ -34,11 +34,11 @@ class _TodoListPageState extends State<TodoListPage> {
 
     if (notificationSettings.authorizationStatus ==
         AuthorizationStatus.authorized) {
-      print('Notifikasi diizinkan');
+      // print('Notifikasi diizinkan');
       FirebaseMessaging.onMessage.listen((RemoteMessage remoteMessage) {
         // print(remoteMessage);
-        print(remoteMessage.notification?.title);
-        print(remoteMessage.notification?.body);
+        // print(remoteMessage.notification?.title);
+        // print(remoteMessage.notification?.body);
         PushNotif pushNotif = PushNotif(
           title: remoteMessage.notification?.title,
           body: remoteMessage.notification?.body,
@@ -46,40 +46,44 @@ class _TodoListPageState extends State<TodoListPage> {
           dataBody: remoteMessage.data['body'],
         );
 
-        print('Assigned to push notif model');
-        print('Before update: $test');
+        // print('Assigned to push notif model');
+        // print('Before update: $test');
         setState(() {
           test = " Ganti";
           _notifInfo = pushNotif;
           _totalNotification++;
         });
-        print('After update: $test');
-        print(_notifInfo?.dataBody);
+        // print('After update: $test');
+        // print(_notifInfo?.dataBody);
 
-        print('Notification count updated: $_totalNotification');
+        // print('Notification count updated: $_totalNotification');
 
         if (_notifInfo != null) {
-          print('notif ada isinya untuk di pop up overlay');
+          // print('notif ada isinya untuk di pop up overlay');
           showSimpleNotification(Text(_notifInfo!.title!),
               leading: const Icon(Icons.notifications),
               subtitle: Text(_notifInfo!.body!),
-              duration: const Duration(seconds: 3));
+              duration: const Duration(seconds: 5),
+              background: Colors.green);
         } else {
-          print('Notif info kosong');
+          // print('Notif info kosong');
         }
       });
     } else {
-      print("Notifikasi tidak diizinkan");
+      // print("Notifikasi tidak diizinkan");
     }
   }
 
   checkMessage() async {
-    RemoteMessage? _initialMessage;
-    await FirebaseMessaging.instance.getInitialMessage();
-    if (_initialMessage != null) {
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
       PushNotif initialPushNotif = PushNotif(
-          title: _initialMessage.notification?.title,
-          body: _initialMessage.notification?.body);
+        title: initialMessage.notification?.title,
+        body: initialMessage.notification?.body,
+        dataTitle: initialMessage.data['title'],
+        dataBody: initialMessage.data['body'],
+      );
       setState(() {
         _notifInfo = initialPushNotif;
         _totalNotification++;
@@ -91,11 +95,11 @@ class _TodoListPageState extends State<TodoListPage> {
   void initState() {
     // _totalNotification = 0;
     super.initState();
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage remoteMessage) {
-      PushNotif notification = PushNotif(
-          title: remoteMessage.notification?.title,
-          body: remoteMessage.notification?.body);
-    });
+    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage remoteMessage) {
+    //   PushNotif notifications = PushNotif(
+    //       title: remoteMessage.notification?.title,
+    //       body: remoteMessage.notification?.body);
+    // });
     regisNotification();
     checkMessage();
   }
@@ -123,7 +127,7 @@ class _TodoListPageState extends State<TodoListPage> {
                   ],
                 )
               else
-                Text('notif info null'),
+                const Text('notif info null'),
             ],
           ),
         ));
