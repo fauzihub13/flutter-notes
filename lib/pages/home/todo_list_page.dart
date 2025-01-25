@@ -222,6 +222,7 @@ class _TodoListPageState extends State<TodoListPage> {
     }
   }
 
+  // Delete Data
   void _deleteNote(NoteModel noteModel) async {
     int result = await dbHelper.delete(noteModel.id!);
     if (result > 0) {
@@ -231,14 +232,7 @@ class _TodoListPageState extends State<TodoListPage> {
 
   @override
   void initState() {
-    // _totalNotification = 0;
     super.initState();
-
-    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage remoteMessage) {
-    //   PushNotif notifications = PushNotif(
-    //       title: remoteMessage.notification?.title,
-    //       body: remoteMessage.notification?.body);
-    // });
     regisNotification();
     checkMessage();
   }

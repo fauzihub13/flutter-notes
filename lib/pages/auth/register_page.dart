@@ -38,18 +38,10 @@ class _RegisterPageState extends State<RegisterPage> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    // const Align(
-                    //   alignment: Alignment.centerLeft,
-                    //   child: Text('Email'),
-                    // ),
                     _emailField(),
                     const SizedBox(
                       height: 20,
                     ),
-                    // const Align(
-                    //   alignment: Alignment.centerLeft,
-                    //   child: Text('Password'),
-                    // ),
                     _passwordField(),
                     const SizedBox(
                       height: 20,

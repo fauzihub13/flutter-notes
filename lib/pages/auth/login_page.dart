@@ -38,18 +38,10 @@ class _LoginPageState extends State<LoginPage> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    // const Align(
-                    //   alignment: Alignment.centerLeft,
-                    //   child: Text('Email'),
-                    // ),
                     _emailField(),
                     const SizedBox(
                       height: 20,
                     ),
-                    // const Align(
-                    //   alignment: Alignment.centerLeft,
-                    //   child: Text('Password'),
-                    // ),
                     _passwordField(),
                     const SizedBox(
                       height: 20,
