@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_taptime/models/user_model.dart';
 import 'package:flutter_taptime/pages/home/home_page.dart';
+import 'package:flutter_taptime/pages/home/list_screen.dart';
 import 'package:flutter_taptime/pages/home/todo_list_page.dart';
 
 class LandingPage extends StatefulWidget {
@@ -16,6 +17,8 @@ class _LandingPageState extends State<LandingPage> {
   final menuItems = [
     const BottomNavigationBarItem(icon: Icon(Icons.edit), label: 'To Do'),
     const BottomNavigationBarItem(icon: Icon(Icons.note), label: 'Notes'),
+    const BottomNavigationBarItem(
+        icon: Icon(Icons.animation), label: 'Animation'),
   ];
 
   late final List<Widget> _pages;
@@ -30,6 +33,7 @@ class _LandingPageState extends State<LandingPage> {
       HomePage(
         userModel: widget.userModel,
       ),
+      const ListScreen()
     ];
   }
 
