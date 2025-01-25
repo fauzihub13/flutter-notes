@@ -1,5 +1,6 @@
 class NoteModel {
   int? id;
+  String? userId;
   String? title;
   String? description;
   DateTime? createdAt;
@@ -7,6 +8,7 @@ class NoteModel {
 
   NoteModel({
     this.id,
+    this.userId,
     this.title,
     this.description,
     this.createdAt,
@@ -17,6 +19,7 @@ class NoteModel {
   factory NoteModel.fromMap(Map<String, dynamic> map) {
     return NoteModel(
       id: map['id'],
+      userId: map['user_id'],
       title: map['title'],
       description: map['description'],
       createdAt: DateTime.parse(map['created_at']),
@@ -27,6 +30,7 @@ class NoteModel {
   // Method to convert an instance to a Map (for database)
   Map<String, dynamic> toMap() {
     return {
+      'user_id': userId,
       'title': title,
       'description': description,
     };

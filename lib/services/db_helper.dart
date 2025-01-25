@@ -32,6 +32,7 @@ class DbHelper {
       '''
       CREATE TABLE $tableName(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id VARCHAR(50) NOT NULL,
       title TEXT NOT NULL,
       description TEXT NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

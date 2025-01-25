@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_taptime/models/user_model.dart';
 import 'package:flutter_taptime/services/auth_service.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final UserModel? userModel;
+  const HomePage({super.key, this.userModel});
 
   @override
   State<HomePage> createState() => _HomePageState();

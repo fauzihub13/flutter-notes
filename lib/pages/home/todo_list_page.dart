@@ -1,10 +1,12 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_taptime/models/push_notif.dart';
+import 'package:flutter_taptime/models/user_model.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 class TodoListPage extends StatefulWidget {
-  const TodoListPage({super.key});
+  final UserModel? userModel;
+  const TodoListPage({super.key, this.userModel});
 
   @override
   State<TodoListPage> createState() => _TodoListPageState();
@@ -95,6 +97,7 @@ class _TodoListPageState extends State<TodoListPage> {
   void initState() {
     // _totalNotification = 0;
     super.initState();
+
     // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage remoteMessage) {
     //   PushNotif notifications = PushNotif(
     //       title: remoteMessage.notification?.title,
@@ -115,19 +118,22 @@ class _TodoListPageState extends State<TodoListPage> {
         body: Center(
           child: Column(
             children: [
+              const SizedBox(
+                height: 10,
+              ),
               Text("Total Notifikasi: ${_totalNotification.toString()}"),
               const SizedBox(
                 height: 40,
               ),
-              if (_notifInfo != null)
-                Column(
-                  children: [
-                    Text('${_notifInfo!.dataTitle ?? _notifInfo!.title}'),
-                    Text('${_notifInfo!.dataBody ?? _notifInfo!.body}'),
-                  ],
-                )
-              else
-                const Text('notif info null'),
+              // if (_notifInfo != null)
+              //   Column(
+              //     children: [
+              //       Text('${_notifInfo!.dataTitle ?? _notifInfo!.title}'),
+              //       Text('${_notifInfo!.dataBody ?? _notifInfo!.body}'),
+              //     ],
+              //   )
+              // else
+              //   const Text('notif info null'),
             ],
           ),
         ));

@@ -19,7 +19,7 @@ class _WrapperState extends State<Wrapper> {
     if (user == null) {
       return const Handler();
     } else {
-      return const LandingPage();
+      return LandingPage(userModel: user,);
     }
   }
 }
