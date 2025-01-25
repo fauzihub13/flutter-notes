@@ -157,7 +157,11 @@ class _HomePageState extends State<HomePage> {
           _statusController.clear();
           _createOrUpdate();
         },
-        child: const Icon(Icons.add),
+        backgroundColor: Colors.lightBlue,
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
     );
   }
