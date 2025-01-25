@@ -169,12 +169,12 @@ class _TodoListPageState extends State<TodoListPage> {
         itemCount: count,
         itemBuilder: (context, index) {
           return Card(
-            elevation: 3.0,
+            elevation: 1.0,
             color: Colors.white,
             child: ListTile(
               leading: const CircleAvatar(
-                backgroundColor: Colors.blue,
-                child: Icon(Icons.notes),
+                backgroundColor: Colors.lightBlueAccent,
+                child: Icon(Icons.edit),
               ),
               title: Text(noteList[index].title!),
               subtitle: Text(noteList[index].description!),
@@ -266,19 +266,18 @@ class _TodoListPageState extends State<TodoListPage> {
           backgroundColor: Colors.lightBlue,
           automaticallyImplyLeading: false,
         ),
-        body: Center(
-            child: Column(
-          children: [
-            const SizedBox(
-              height: 10,
-            ),
-            Text("Total Notifikasi: ${_totalNotification.toString()}"),
-            const SizedBox(
-              height: 40,
-            ),
-            if (count == 0) const Text('Kosong Icibos'),
-            createNoteListView(),
-          ],
-        )));
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Center(
+              child: Column(
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              if (count == 0) const Text('Kosong Icibos'),
+              createNoteListView(),
+            ],
+          )),
+        ));
   }
 }

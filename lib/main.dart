@@ -24,9 +24,10 @@ class MyApp extends StatelessWidget {
       initialData: null,
       child: OverlaySupport.global(
         child: MaterialApp(
+          color: Colors.white,
           title: 'Flutter TapTime',
           theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
             useMaterial3: true,
           ),
           home: const Wrapper(),

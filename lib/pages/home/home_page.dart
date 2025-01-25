@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                         }
                       }
                     },
-                    child: Text(action == 'create' ? 'Create' : 'update')),
+                    child: Text(action == 'create' ? 'Simpan' : 'Ubah')),
               ],
             ),
           );
@@ -121,7 +121,9 @@ class _HomePageState extends State<HomePage> {
                     final DocumentSnapshot documentSnapshot =
                         streamSnapshot.data!.docs[index];
                     return Card(
-                      margin: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 6),
+                      color: Colors.white,
                       child: ListTile(
                         title: Text(documentSnapshot['name']),
                         subtitle: Text(documentSnapshot['status']),
