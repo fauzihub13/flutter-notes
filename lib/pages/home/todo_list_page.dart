@@ -169,45 +169,39 @@ class _TodoListPageState extends State<TodoListPage> {
           // 3) Telling animated list to start animation
           listKey.currentState?.insertItem(noteList.length - 1);
         }
-        // setState(() {
-        //   noteList = noteListNew;
-        //   count = noteListNew.length;
-        // });
       });
     });
   }
 
   Widget slideIt(BuildContext context, int index, animation) {
     // NoteModel item = noteList[index];
-    return SlideTransition(
-        position: Tween<Offset>(
-          begin: const Offset(1, 0),
-          end: const Offset(0, 0),
-        ).animate(CurvedAnimation(
-            parent: animation,
-            curve: Curves.easeIn,
-            reverseCurve: Curves.easeOut)),
-        child: Card(
-          elevation: 1.0,
-          color: Colors.white,
-          child: ListTile(
-            leading: const CircleAvatar(
-              backgroundColor: Colors.lightBlueAccent,
-              child: Icon(Icons.edit),
-            ),
-            title: Text(noteList[index].title!),
-            subtitle: Text(noteList[index].description!),
-            trailing: GestureDetector(
-              child: const Icon(Icons.delete),
-              onTap: () {
-                _deleteNote(noteList[index], index);
+    return FadeTransition(
+      opacity: animation,
+      child: SizeTransition(
+        key: UniqueKey(),
+        sizeFactor: animation,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 6),
+          child: Card(
+            elevation: 0,
+            color: Colors.grey.shade200,
+            child: ListTile(
+              title: Text(noteList[index].title!),
+              subtitle: Text(noteList[index].description!),
+              trailing: GestureDetector(
+                child: const Icon(Icons.delete),
+                onTap: () {
+                  _deleteNote(noteList[index], index);
+                },
+              ),
+              onTap: () async {
+                _createOrUpdate(noteModel: noteList[index], index: index);
               },
             ),
-            onTap: () async {
-              _createOrUpdate(noteModel: noteList[index], index: index);
-            },
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   // Store Data
@@ -216,9 +210,9 @@ class _TodoListPageState extends State<TodoListPage> {
     if (result > 0) {
       noteModel.id = result;
 
-      listKey.currentState?.insertItem(0,
-          duration: const Duration(milliseconds: 500));
-      noteList =[]
+      listKey.currentState
+          ?.insertItem(0, duration: const Duration(milliseconds: 500));
+      noteList = []
         // ignore: prefer_inlined_adds
         ..add(noteModel)
         ..addAll(noteList);
