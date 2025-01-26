@@ -29,15 +29,14 @@ class _TodoListPageState extends State<TodoListPage> {
   String test = "Hai";
   PushNotif? _notifInfo;
 
+  // LIstview animation
+  double screenHeight = 0;
+  double screenWidth = 0;
+
+  bool startAnimation = false;
+
   void regisNotification() async {
     _firebaseMessaging = FirebaseMessaging.instance;
-
-    // Future<void> _firebaseMessageHandler(RemoteMessage remoteMessage) async {
-    //   print('Handling message: ${remoteMessage.messageId}');
-    // }
-
-    // FirebaseMessaging.onBackgroundMessage(_firebaseMessageHandler);
-
     NotificationSettings notificationSettings =
         await _firebaseMessaging.requestPermission(
       alert: true,
@@ -168,25 +167,32 @@ class _TodoListPageState extends State<TodoListPage> {
         shrinkWrap: true,
         itemCount: count,
         itemBuilder: (context, index) {
-          return Card(
-            elevation: 1.0,
-            color: Colors.white,
-            child: ListTile(
-              leading: const CircleAvatar(
-                backgroundColor: Colors.lightBlueAccent,
-                child: Icon(Icons.edit),
-              ),
-              title: Text(noteList[index].title!),
-              subtitle: Text(noteList[index].description!),
-              trailing: GestureDetector(
-                child: const Icon(Icons.delete),
-                onTap: () {
-                  _deleteNote(noteList[index]);
+          return AnimatedContainer(
+            width: screenWidth,
+            curve: Curves.easeInOut,
+            duration: Duration(milliseconds: 300 + (index * 200)),
+            transform: Matrix4.translationValues(
+                startAnimation ? 0 : screenWidth, 0, 0),
+            child: Card(
+              elevation: 1.0,
+              color: Colors.white,
+              child: ListTile(
+                leading: const CircleAvatar(
+                  backgroundColor: Colors.lightBlueAccent,
+                  child: Icon(Icons.edit),
+                ),
+                title: Text(noteList[index].title!),
+                subtitle: Text(noteList[index].description!),
+                trailing: GestureDetector(
+                  child: const Icon(Icons.delete),
+                  onTap: () {
+                    _deleteNote(noteList[index]);
+                  },
+                ),
+                onTap: () async {
+                  _createOrUpdate(noteModel: noteList[index]);
                 },
               ),
-              onTap: () async {
-                _createOrUpdate(noteModel: noteList[index]);
-              },
             ),
           );
         });
@@ -233,12 +239,22 @@ class _TodoListPageState extends State<TodoListPage> {
   @override
   void initState() {
     super.initState();
+    print("Baru start state $startAnimation");
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {
+        startAnimation = true;
+        print("state harusnya berubah $startAnimation");
+      });
+    });
     regisNotification();
     checkMessage();
   }
 
   @override
   Widget build(BuildContext context) {
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -275,7 +291,7 @@ class _TodoListPageState extends State<TodoListPage> {
                 height: 10,
               ),
               if (count == 0) const Text('Kosong Icibos'),
-              createNoteListView(),
+              createNoteListView()
             ],
           )),
         ));

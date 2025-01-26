@@ -62,10 +62,12 @@ class _ListScreenState extends State<ListScreen> {
   @override
   void initState() {
     super.initState();
+    print("Baru start state $startAnimation");
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setState(() {
         startAnimation = true;
+        print("state harusnya berubah $startAnimation");
       });
     });
   }
@@ -89,8 +91,7 @@ class _ListScreenState extends State<ListScreen> {
                 height: 30,
               ),
               GestureDetector(
-                onTap: () {
-                },
+                onTap: () {},
                 child: const Text(
                   "SHOW LIST",
                   style: TextStyle(
