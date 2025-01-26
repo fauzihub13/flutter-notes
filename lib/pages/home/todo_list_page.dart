@@ -22,18 +22,14 @@ class _TodoListPageState extends State<TodoListPage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   DbHelper dbHelper = DbHelper();
+
+  final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
   List<NoteModel> noteList = [];
   int count = 0;
 
-  int _totalNotification = 0;
+  // int _totalNotification = 0;
   String test = "Hai";
   PushNotif? _notifInfo;
-
-  // LIstview animation
-  double screenHeight = 0;
-  double screenWidth = 0;
-
-  bool startAnimation = false;
 
   void regisNotification() async {
     _firebaseMessaging = FirebaseMessaging.instance;
@@ -46,11 +42,7 @@ class _TodoListPageState extends State<TodoListPage> {
 
     if (notificationSettings.authorizationStatus ==
         AuthorizationStatus.authorized) {
-      // print('Notifikasi diizinkan');
       FirebaseMessaging.onMessage.listen((RemoteMessage remoteMessage) {
-        // print(remoteMessage);
-        // print(remoteMessage.notification?.title);
-        // print(remoteMessage.notification?.body);
         PushNotif pushNotif = PushNotif(
           title: remoteMessage.notification?.title,
           body: remoteMessage.notification?.body,
@@ -58,20 +50,13 @@ class _TodoListPageState extends State<TodoListPage> {
           dataBody: remoteMessage.data['body'],
         );
 
-        // print('Assigned to push notif model');
-        // print('Before update: $test');
         setState(() {
           test = " Ganti";
           _notifInfo = pushNotif;
-          _totalNotification++;
+          // _totalNotification++;
         });
-        // print('After update: $test');
-        // print(_notifInfo?.dataBody);
-
-        // print('Notification count updated: $_totalNotification');
 
         if (_notifInfo != null) {
-          // print('notif ada isinya untuk di pop up overlay');
           showSimpleNotification(Text(_notifInfo!.title!),
               leading: const Icon(Icons.notifications),
               subtitle: Text(_notifInfo!.body!),
@@ -98,13 +83,13 @@ class _TodoListPageState extends State<TodoListPage> {
       );
       setState(() {
         _notifInfo = initialPushNotif;
-        _totalNotification++;
+        // _totalNotification++;
       });
     }
   }
 
   // Modal Bottom Sheet
-  Future<void> _createOrUpdate({NoteModel? noteModel}) async {
+  Future<void> _createOrUpdate({NoteModel? noteModel, int? index}) async {
     String action = 'create';
     _titleController.text = '';
     _descriptionController.text = '';
@@ -148,7 +133,7 @@ class _TodoListPageState extends State<TodoListPage> {
                         noteModel!.title = _titleController.text.trim();
                         noteModel.description =
                             _descriptionController.text.trim();
-                        _updateNote(noteModel);
+                        _updateNote(noteModel, index!);
                         Navigator.pop(context);
                       } else {}
                     },
@@ -160,101 +145,119 @@ class _TodoListPageState extends State<TodoListPage> {
   }
 
   // Build Listview
-  ListView createNoteListView() {
-    _updateListView();
-    return ListView.builder(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: count,
-        itemBuilder: (context, index) {
-          return AnimatedContainer(
-            width: screenWidth,
-            curve: Curves.easeInOut,
-            duration: Duration(milliseconds: 300 + (index * 200)),
-            transform: Matrix4.translationValues(
-                startAnimation ? 0 : screenWidth, 0, 0),
-            child: Card(
-              elevation: 1.0,
-              color: Colors.white,
-              child: ListTile(
-                leading: const CircleAvatar(
-                  backgroundColor: Colors.lightBlueAccent,
-                  child: Icon(Icons.edit),
-                ),
-                title: Text(noteList[index].title!),
-                subtitle: Text(noteList[index].description!),
-                trailing: GestureDetector(
-                  child: const Icon(Icons.delete),
-                  onTap: () {
-                    _deleteNote(noteList[index]);
-                  },
-                ),
-                onTap: () async {
-                  _createOrUpdate(noteModel: noteList[index]);
-                },
-              ),
-            ),
-          );
-        });
+  Widget createNoteListView() {
+    return AnimatedList(
+      key: listKey,
+      initialItemCount: noteList.length,
+      itemBuilder: (context, index, animation) {
+        return slideIt(context, index, animation);
+      },
+    );
   }
 
   // Fetch Data From SQFLite
-  void _updateListView() async {
+  Future<void> _updateListView() async {
     final Future<Database> dbFuture = dbHelper.initDb();
     dbFuture.then((database) {
       Future<List<NoteModel>> noteListFuture = dbHelper.getAllData();
-      noteListFuture.then((noteListNew) {
-        setState(() {
-          noteList = noteListNew;
-          count = noteListNew.length;
-        });
+      noteListFuture.then((noteListNew) async {
+        for (int item = 0; item < noteListNew.length; item++) {
+          // 1) Wait for one second
+          await Future.delayed(const Duration(milliseconds: 400));
+          // 2) Adding data to actual variable that holds the item.
+          noteList.add(noteListNew[item]);
+          // 3) Telling animated list to start animation
+          listKey.currentState?.insertItem(noteList.length - 1);
+        }
+        // setState(() {
+        //   noteList = noteListNew;
+        //   count = noteListNew.length;
+        // });
       });
     });
+  }
+
+  Widget slideIt(BuildContext context, int index, animation) {
+    // NoteModel item = noteList[index];
+    return SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(1, 0),
+          end: const Offset(0, 0),
+        ).animate(CurvedAnimation(
+            parent: animation,
+            curve: Curves.easeIn,
+            reverseCurve: Curves.easeOut)),
+        child: Card(
+          elevation: 1.0,
+          color: Colors.white,
+          child: ListTile(
+            leading: const CircleAvatar(
+              backgroundColor: Colors.lightBlueAccent,
+              child: Icon(Icons.edit),
+            ),
+            title: Text(noteList[index].title!),
+            subtitle: Text(noteList[index].description!),
+            trailing: GestureDetector(
+              child: const Icon(Icons.delete),
+              onTap: () {
+                _deleteNote(noteList[index], index);
+              },
+            ),
+            onTap: () async {
+              _createOrUpdate(noteModel: noteList[index], index: index);
+            },
+          ),
+        ));
   }
 
   // Store Data
   void _createNote(NoteModel noteModel) async {
     int result = await dbHelper.create(noteModel);
     if (result > 0) {
-      _updateListView();
+      noteModel.id = result;
+
+      listKey.currentState?.insertItem(0,
+          duration: const Duration(milliseconds: 500));
+      noteList =[]
+        // ignore: prefer_inlined_adds
+        ..add(noteModel)
+        ..addAll(noteList);
     }
   }
 
   // Update Data
-  void _updateNote(NoteModel noteModel) async {
+  void _updateNote(NoteModel noteModel, int index) async {
     int result = await dbHelper.update(noteModel);
     if (result > 0) {
-      _updateListView();
+      // _updateListView();
+      setState(() {
+        noteList[index] = noteModel;
+      });
     }
   }
 
   // Delete Data
-  void _deleteNote(NoteModel noteModel) async {
+  void _deleteNote(NoteModel noteModel, int index) async {
     int result = await dbHelper.delete(noteModel.id!);
     if (result > 0) {
-      _updateListView();
+      // _updateListView();
+      listKey.currentState?.removeItem(
+          index, (_, animation) => slideIt(context, 0, animation),
+          duration: const Duration(milliseconds: 500));
+      noteList.removeAt(index);
     }
   }
 
   @override
   void initState() {
     super.initState();
-    print("Baru start state $startAnimation");
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      setState(() {
-        startAnimation = true;
-        print("state harusnya berubah $startAnimation");
-      });
-    });
     regisNotification();
     checkMessage();
+    _updateListView();
   }
 
   @override
   Widget build(BuildContext context) {
-    screenHeight = MediaQuery.of(context).size.height;
-    screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -290,8 +293,8 @@ class _TodoListPageState extends State<TodoListPage> {
               const SizedBox(
                 height: 10,
               ),
-              if (count == 0) const Text('Kosong Icibos'),
-              createNoteListView()
+              // if (count == 0) const Text('Kosong Icibos'),
+              Expanded(child: createNoteListView())
             ],
           )),
         ));

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ListScreen extends StatefulWidget {
-  const ListScreen({Key? key}) : super(key: key);
+  const ListScreen({super.key});
 
   @override
   State<ListScreen> createState() => _ListScreenState();
@@ -62,12 +62,12 @@ class _ListScreenState extends State<ListScreen> {
   @override
   void initState() {
     super.initState();
-    print("Baru start state $startAnimation");
+    // print("Baru start state $startAnimation");
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setState(() {
         startAnimation = true;
-        print("state harusnya berubah $startAnimation");
+        // print("state harusnya berubah $startAnimation");
       });
     });
   }
