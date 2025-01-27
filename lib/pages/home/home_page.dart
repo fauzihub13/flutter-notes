@@ -77,12 +77,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _deleteAttendance(String attendanceId) async {
-    // Gunakan context sebelum operasi async
     final messenger = ScaffoldMessenger.of(context);
 
     await _studentAttendance.doc(attendanceId).delete();
 
-    // Gunakan messenger untuk menghindari masalah dengan context
     messenger.showSnackBar(const SnackBar(
       content: Text("Data berhasil dihapus"),
       backgroundColor: Colors.lightBlue,

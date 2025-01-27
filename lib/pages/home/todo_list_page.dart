@@ -120,9 +120,9 @@ class _TodoListPageState extends State<TodoListPage> {
                 ),
                 ElevatedButton(
                     onPressed: () async {
+                      if (_titleController.text.isEmpty ||
+                          _descriptionController.text.isEmpty) return;
                       if (action == 'create') {
-                        if (_titleController.text.isEmpty ||
-                            _descriptionController.text.isEmpty) return;
                         NoteModel noteModel = NoteModel(
                             title: _titleController.text.trim(),
                             description: _descriptionController.text.trim(),
